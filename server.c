@@ -2,38 +2,45 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include "Minitalk.h"
 
-void huu(int i)
+void sig_h(int signum)
 {
-
-    if (i == SIGUSR1)
-         write(1,"1",1);
-    else if (i == SIGUSR2)
-         write(1,"0",1);
-    else 
-         write(1,"taha",4);
-
+  static int a;
+  static int j;
+  if (signum == SIGUSR1)
+    { 
+       a = (a<<1)+1;
+        j++;
+    }
+    if (signum == SIGUSR2)
+    { 
+        a = (a<<1);
+        j++;
+    }
+  if(j >= 8)
+  {
+  //  
+  // 
+  ft_putchar(a);
+    j = 0;
+    a = 0;
+  }
 }
 int main()
 {
-  int k = getpid();
-  int t = 7;
+  int pid = getpid();
+//   int t = 7;
 
-  void (*f)(int);
-   f = &huu;
-  printf("PID: %d\n", k);
-  int i = 0;
+//   void (*f)(int);
+//    f = &huu;
+  printf("SERVER PID: %d\n", pid);
+//   signal(SIGUSR1, f);
+// signal(SIGUSR2, f);
   while (1)
   {
-    signal(SIGUSR1, f);
-    signal(SIGUSR2, f);
-    signal(SIGABRT, f);
-    // if(!i)
-    //   {
-    //   printf("\n");
-    //   printf("\n");
-    //     i = 1;
-    //   }
-   pause();
+      signal(SIGUSR1, &sig_h);
+      signal(SIGUSR2, &sig_h);
+      pause();
   }
 }
