@@ -5,15 +5,6 @@
 #include "Minitalk.h"
 
 
-size_t ft_strlen(char *str)
-{
-  int i;
-
-  i = 0;
-  while(str[i])
-      i++;
-  return(i);
-}
 void sig_h(int signum)
 {
   static int a;
@@ -21,38 +12,39 @@ void sig_h(int signum)
   if (signum == SIGUSR1)
     { 
        a = (a<<1)+1;
-        //j++;
+        j++;
     }
     if (signum == SIGUSR2)
     { 
         a = (a<<1);
-        //j++;
+        j++;
     }
-  j++;
   if(j >= 8)
   { 
     ft_putchar(a);
     a = 0;
     j = 0;
-    //a = 0;
+
   }
 }
 int main()
 {
-  char *pid = ft_itoa(getpid());
+  struct sigaction	sa;
 
-//   void (*f)(int);
-//    f = &huu;
-  write(1, "SERVER PID : ", 13);
-  write(1, pid, ft_strlen(pid));
+	sa.sa_handler = &sig_h;
+	sa.sa_flags = SA_RESTART;
+  sigaction(SIGUSR1, &sa, NULL);
+  sigaction(SIGUSR2, &sa, NULL);
+  int pid = getpid();
+   write(1, "SERVER PID : ", 14);
+  ft_putnbr(pid);
   write(1, "\n", 1);
-  free(pid);
   while (1)
   {
-    signal(SIGUSR1, &sig_h);
-    signal(SIGUSR2, &sig_h);
-      // sigaction(SIGUSR1, &sig_h, NULL);
-      // sigaction(SIGUSR2, &sig_h, NULL);
-      pause();
+    // sigaction(SIGUSR1, &sig_h, NULL);
+    // sigaction(SIGUSR2, &sig_h, NULL);
+    // signal(SIGUSR1, %sig_h):
+    // sigaction(SIGUSR2, &sa, NULL);
+    pause();
   }
 }
