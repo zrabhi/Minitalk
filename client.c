@@ -22,7 +22,7 @@ void send_char(char c, int pid)
       if(kill(pid, SIGUSR2)== -1)
           write(1 ,"error", 5);
     }
-    usleep(150);
+    usleep(500);
     bit--;
   }
 }
@@ -40,7 +40,6 @@ void  client_message(char *str, int pid)
 {
   char *our_msg;
   int pid = atoi(argv[1]);
-  char s[] = "hello world"; 
   our_msg = argv[2];
   client_message(our_msg, pid);
   

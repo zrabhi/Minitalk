@@ -4,11 +4,21 @@
 #include <unistd.h>
 #include "Minitalk.h"
 
+int g_pid = 0;
 
-void sig_h(int signum)
+void	(int *i, int *result, int pid)
 {
-  static int a;
-  static int j;
+	g_pid = pid;
+	*i = 0;
+	*result = 0;
+}
+void sig_handler(int signum, siginfo_t *sig_info, void *b)
+{
+   static int a;
+   static int j;
+   (void)b;
+   if (g_pid != sig_info->si_pid)
+		reset(&a, &j, sig_info->si_pid);
   if (signum == SIGUSR1)
     { 
        a = (a<<1)+1;
@@ -31,14 +41,14 @@ int main()
 {
   struct sigaction	sa;
 
-	sa.sa_handler = &sig_h;
-	sa.sa_flags = SA_RESTART;
-  sigaction(SIGUSR1, &sa, NULL);
-  sigaction(SIGUSR2, &sa, NULL);
-  int pid = getpid();
+ int pid = getpid();
    write(1, "SERVER PID : ", 14);
   ft_putnbr(pid);
   write(1, "\n", 1);
+	sa.__sigaction_u.__sa_sigaction = &sig_handler;
+	sa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR1, &sa, NULL);
+  sigaction(SIGUSR2, &sa, NULL);
   while (1)
   {
     // sigaction(SIGUSR1, &sig_h, NULL);
