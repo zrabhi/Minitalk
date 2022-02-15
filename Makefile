@@ -13,7 +13,7 @@
 
 SRC = ft_putchar.c ft_putnbr.c ft_atoi.c ft_strlen.c ft_bzero.c
 CC = gcc
-GCC_FLAGS = -wall -wextra -werror
+GCC_FLAGS = -wall -wextra -werror 
 server = server
 client = client
 

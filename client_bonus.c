@@ -4,24 +4,27 @@
 
 void send_char(char c, int pid)
 {
-	 int bit;
-	while (bit++ <= 8)
+	 int bit = 7 ;
+	while (bit != -1)
 	{
 		// if (kill(pid, 1 & (c >> bit) ?   SIGUSR1 : SIGUSR2) == -1)
 				// write(1, "Failed to setup signal", 23);
-    	if ((1 & (c >> bit)) == 1)
+    	if (1 & (c >> bit))
     	{
+			
       		if(kill(pid, SIGUSR1) == -1)
         		  write(1 ,"Failed to setuo signal", 23);
+			// write(1, "1", 1);
     	
 		}
     	else 
     	{
       		if(kill(pid, SIGUSR2)== -1)
         			write(1 ,"Failed to setup signal", 23);
+			// write(1, "0", 1);
     	}
-    usleep(500);
-    //bit++;
+    usleep(600);
+    bit--;
 	}
 }
 void	recieved(void)

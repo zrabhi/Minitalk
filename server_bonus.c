@@ -1,4 +1,5 @@
 #include "Minitalk.h"
+#include <stdio.h>
 
 int	g_pid;
 
@@ -9,31 +10,37 @@ void	reset(int pid)
 
 void	sig_handler(int signum, siginfo_t *sig_info, void *b)
 {
-	 static int	a;
+	char	a;
+	static char last_char;
 	static int	j;
+	const char back_space = 8;
 	(void)b;	
 	if (g_pid != sig_info->si_pid)
 	{
+		if((last_char >> 8) | 1)
+			write(1, &back_space, 1);
 		 a = 0;
 		 j = 0;
 		 reset(sig_info->si_pid);
 	}
-	if (signum == SIGUSR1 )
+	if (signum == SIGUSR1)
 	{
-		a = (a << 1) + 1;                            
-		j++;
+		//write(1, "hey", 3);
+		a = (a << 1) | 1;
+		j++;                 
 	}
-	if (signum == SIGUSR2)
+	if(signum == 31)
 	{
 		a = (a << 1);
 		j++;
 	}
-	if (j >= 8)
+	if(j >= 8)
 	{
 		ft_putchar(a);
+		last_char = a;
 		a = 0;
 		j = 0;
-	}	
+	}
 }
 
 int	main(void)
