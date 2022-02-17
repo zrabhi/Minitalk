@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zrabhi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/12 15:40:59 by zrabhi            #+#    #+#             */
-/*   Updated: 2022/02/16 18:58:51 by zrabhi           ###   ########.fr       */
+/*   Created: 2022/02/16 19:00:02 by zrabhi            #+#    #+#             */
+/*   Updated: 2022/02/16 19:02:34 by zrabhi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H 
+#include "Minitalk.h"
 
-# include <unistd.h>
-# include <sys/signal.h>
-# include <signal.h>
-# include <stdlib.h>
+void	ft_putnbr(int n)
+{
+	long int	nb;
 
-void	send_char(char c, int pid);
-int		ft_atoi(const char *str);
-void	client_message(char *str, int pid);
-void	sig_h(int signum);
-void	ft_putchar(char c);
-void	ft_putnbr(int n);
-#endif
+	nb = n;
+	if (nb < 0)
+	{
+		ft_putchar('-');
+		nb = nb * -1;
+	}
+	if (nb <= 9)
+		ft_putchar((nb + 48));
+	if (nb > 9)
+	{
+		ft_putnbr((nb / 10));
+		ft_putnbr((nb % 10));
+	}
+}

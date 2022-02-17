@@ -10,28 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "Minitalk.h"
 
 int	g_pid;
 
-void	reset(int *i, int *result, int pid)
+void	reset1(char *c, int *j)
+{
+	*j = 0;
+	*c = 0;
+}
+
+void	reset2(int pid)
 {
 	g_pid = pid;
-	*i = 0;
-	*result = 0;
 }
 
 void	sig_handler(int signum, siginfo_t *sig_info, void *b)
 {
-	static int	a;
+	static char	a;
 	static int	j;
-	(void)b;	
+
+	b = NULL;
 	if (g_pid != sig_info->si_pid)
-		reset(&a, &j, sig_info->si_pid);
+	{
+		reset1(&a, &j);
+		reset2(sig_info->si_pid);
+	}
 	if (signum == SIGUSR1)
 	{
-		a = (a << 1) + 1;
+		a = (a << 1) | 1;
 		j++;
 	}
 	if (signum == SIGUSR2)
@@ -42,8 +49,7 @@ void	sig_handler(int signum, siginfo_t *sig_info, void *b)
 	if (j >= 8)
 	{
 		ft_putchar(a);
-		a = 0;
-		j = 0;
+		reset1(&a, &j);
 	}	
 }
 

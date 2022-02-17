@@ -6,70 +6,63 @@
 /*   By: zrabhi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 19:45:37 by zrabhi            #+#    #+#             */
-/*   Updated: 2022/02/15 19:45:39 by zrabhi           ###   ########.fr       */
+/*   Updated: 2022/02/16 18:57:21 by zrabhi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "Minitalk.h"
 
-// int bit = 7;
-
-void send_char(char c, int pid)
+void	send_char(char c, int pid)
 {
-	 int bit = 7 ;
+	int	bit;
+
+	bit = 7;
 	while (bit != -1)
 	{
-		// if (kill(pid, 1 & (c >> bit) ?   SIGUSR1 : SIGUSR2) == -1)
-				// write(1, "Failed to setup signal", 23);
-    	if (1 & (c >> bit))
-    	{
-			
-      		if(kill(pid, SIGUSR1) == -1)
-        		  write(1 ,"Failed to setuo signal", 23);
-			// write(1, "1", 1);
-    	
+		if (1 & (c >> bit))
+		{
+			if (kill(pid, SIGUSR1) == -1)
+				write(1, "Failed to setuo signal", 23);
 		}
-    	else 
-    	{
-      		if(kill(pid, SIGUSR2)== -1)
-        			write(1 ,"Failed to setup signal", 23);
-			// write(1, "0", 1);
-    	}
-    usleep(600);
-    bit--;
+		else
+		{
+			if (kill(pid, SIGUSR2) == -1)
+				write(1, "Failed to setup signal", 23);
+		}
+		usleep(600);
+	bit--;
 	}
 }
+
 void	recieved(void)
 {
-    write(1, "signal is recieved succesfully\n", 32);
+	write(1, "signal is recieved succesfully\n", 32);
 }
 
-void  client_message(char *str, int pid)
+void	client_message(char *str, int pid)
 {
-		int i;
+	int	i;
 
-		i = -1;
-		while(str[++i])
-		{
-			send_char(str[i], pid);
-		}
-		recieved();
-	
+	i = -1;
+	while (str[++i])
+		send_char(str[i], pid);
+	recieved();
 }
-void 	invalid(void)
+
+void	invalid(void)
 {
 	write(1, "Invalide parametrs\n", 19);
 	exit(EXIT_FAILURE);
 }
-int main(int argc, char **argv)
-{
-	 char *our_msg;
-	 int pid;
 
-	if(argc != 3)
+int	main(int argc, char **argv)
+{
+	int		pid;
+	char	*our_msg;
+
+	if (argc != 3)
 		invalid();
-  	pid = ft_atoi(argv[1]);
- 	our_msg = argv[2];
- 	client_message(our_msg, pid);
+	pid = ft_atoi(argv[1]);
+	our_msg = argv[2];
+	client_message(our_msg, pid);
 }

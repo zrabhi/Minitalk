@@ -11,15 +11,53 @@
 # **************************************************************************** #
 
 
-SRC = ft_putchar.c ft_putnbr.c ft_atoi.c ft_strlen.c ft_bzero.c
-CC = gcc
-GCC_FLAGS = -wall -wextra -werror 
-server = server
-client = client
+SRC_CLIENT = client.c ft_atoi.c ft_putnbr.c ft_putchar.c
 
-all : 
-	$(CC) $(GCC) $(SRC) server.c -o $(server)
-	$(CC) $(GCC) $(SRC) client.c -o $(client)
-bonus :
-	$(CC) $(GCC) $(SRC) server_bonus.c -o server_bns
-	$(CC) $(GCC) $(SRC) client_bonus.c -o client_bns
+SRC_SERVER =  server.c ft_atoi.c  ft_putnbr.c ft_putchar.c
+
+OBG_CLIENT = $(SRC_CLIENT:.c=.o)
+
+OBG_SERVER = $(SRC_SERVER:.c=.o)
+
+SRC_CLIENT_BONUS = client_bonus.c ft_atoi.c ft_putnbr.c ft_putchar.c
+
+SRC_SERVER_BONUS = server_bonus.c ft_atoi.c   ft_putnbr.c ft_putchar.c
+
+OBG_CLIENT_BONUS = $(SRC_CLIENT_BONUS:.c=.o)
+
+OBG_SERVER_BONUS = $(SRC_SERVER_BONUS:.c=.o)
+
+GCC_FLAGS = -Wall -Wextra -Werror
+
+CC = cc
+
+CLIENT = client
+
+ClIENT_BONUS = client_bonus
+
+SERVER_BONUS = server_bonus
+
+SERVER = server
+
+NAME = client_server
+
+all : $(NAME)
+
+$(NAME) : $(OBG_CLIENT) $(OBG_SERVER)
+	$(CC) $(GCC_FLAGS) -o $(CLIENT) $(OBG_CLIENT) 
+	$(CC) $(GCC_FLAGS) -o $(SERVER) $(OBG_SERVER)
+
+%.o : %.c
+	$(CC) $(GCC_FLAGS) -c $<
+
+bonus : $(OBG_CLIENT_BONUS) $(OBG_SERVER_BONUS)
+	$(CC) $(GCC_FLAGS) -o $(ClIENT_BONUS) $(OBG_CLIENT_BONUS) 
+	$(CC) $(GCC_FLAGS) -o $(SERVER_BONUS) $(OBG_SERVER_BONUS)
+
+clean :
+	rm -f $(OBG_SERVER) $(OBG_CLIENT) $(OBG_CLIENT_BONUS) $(OBG_SERVER_BONUS)
+
+fclean : clean
+	rm -f $(CLIENT) $(SERVER) $(ClIENT_BONUS) $(SERVER_BONUS)
+
+re : fclean all
